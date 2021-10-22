@@ -1,0 +1,33 @@
+body {
+    padding-top: 2%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.table td, .table th {
+    padding: 1%;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table tr td div {
+    text-align: center;
+}
+
+#table {
+    border-radius: 1px;
+    border: 2px solid #256887;
+}
+
+.table tr th {
+    text-align: center;
+}
+
+#add_task {
+    color: #fbfffb;
+    background: #0077ff;
+}
+
+input {
+    padding-bottom: 5px;
+}
