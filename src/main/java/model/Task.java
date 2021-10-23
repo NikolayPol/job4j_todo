@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
  * Класс Task описывает модель задания.
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.10.2021
+ * @version 2.0 23.10.2021
  */
 @Entity
 @Table(name = "tasks")
@@ -24,6 +24,9 @@ public class Task {
     private final String description;
     private final LocalDateTime created;
     private boolean done;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Task() {
         this.id = 0;
@@ -60,6 +63,14 @@ public class Task {
         this.done = done;
     }
 
+    public Task(int id, String description, LocalDateTime created, Boolean done, User user) {
+        this.id = id;
+        this.description = description;
+        this.created = created;
+        this.done = done;
+        this.user = user;
+    }
+
     public int getId() {
         return id;
     }
@@ -82,6 +93,14 @@ public class Task {
 
     public void setDone(Boolean done) {
         this.done = done;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

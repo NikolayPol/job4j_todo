@@ -1,6 +1,7 @@
 package store;
 
 import model.Task;
+import model.User;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Интерфейс Store описывает методы для взаимоействия с БД.
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.10.2021
+ * @version 2.0 23.10.2021
  */
 public interface Store {
     Task add(Task task);
@@ -17,9 +18,15 @@ public interface Store {
 
     List<Task> findAll();
 
+    List<Task> findAll(User user);
+
     Task findById(int id);
 
-    List<Task> showFilterItems();
+    List<Task> showFilterItems(User user);
 
     boolean update(Task task);
+
+    void addUser(User user);
+
+    User findUserByEmail(String email);
 }

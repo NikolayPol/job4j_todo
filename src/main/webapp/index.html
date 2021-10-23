@@ -18,29 +18,39 @@
 
 <body>
 
-<div id="new_task" titlе="Добавьте задачу">
-    <form method="post">
-        <label for="description">Описание:</label>
-        <input type="text" name="description" id="description">
-        <button class="btn btn-primary btn-sm" id="add_task" onclick="addTask()">Дoбaвить зaдaчy</button>
-        <div>
-            <label for="filter">Показать невыполненные задания:</label>
-            <input type="checkbox" id="filter" name="filter" value="filter" onchange="filterItems()">
+<div class="container-fluid">
+    <div class="row">
+        <div id="new_task" class="col-md-8" titlе="Добавьте задачу" style="padding-left: 0">
+            <form method="post">
+                <label for="description">Описание:</label>
+                <input type="text" name="description" id="description">
+                <button class="btn btn-primary btn-sm" id="add_task" onclick="addTask()">Дoбaвить зaдaчy</button>
+                <div>
+                    <label for="filter">Показать невыполненные задания:</label>
+                    <input type="checkbox" id="filter" name="filter" value="filter" onchange="filterItems()">
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="col-md-3">
+            <p id="username">Пользователь</p>
+        </div>
+        <div class="col-md-1">
+            <a href="./logout.do">|Выйти</a>
+        </div>
+    </div>
 </div>
 
 <table class="table table-hover table-bordered border border-2" id="table">
     <thead class="table-info">
-        <tr>
-            <th scope="col">Описание</th>
-            <th scope="col">Создано</th>
-            <th scope="col">Выполнено</th>
-        </tr>
+    <tr>
+        <th scope="col">Описание</th>
+        <th scope="col">Создано</th>
+        <th scope="col">Выполнено</th>
+    </tr>
     </thead>
     <tbody>
-        <tr>
-        </tr>
+    <tr>
+    </tr>
     </tbody>
 </table>
 

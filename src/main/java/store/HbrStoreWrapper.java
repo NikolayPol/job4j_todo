@@ -1,6 +1,7 @@
 package store;
 
 import model.Task;
+import model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -10,6 +11,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.List;
 
@@ -17,7 +20,7 @@ import java.util.List;
  * Класс HbrStoreWrapper реализует шаблон Wrapper(Обертка).
  *
  * @author Nikolay Polegaev
- * @version 1.0 22.10.2021
+ * @version 2.0 23.10.2021
  */
 public class HbrStoreWrapper implements Store, AutoCloseable {
     private static final Logger LOG = LoggerFactory
@@ -102,6 +105,19 @@ public class HbrStoreWrapper implements Store, AutoCloseable {
     }
 
     @Override
+    public List<Task> findAll(User user) {
+        return this.tx(
+                session -> {
+                    List<Task> result;
+                    Query query = session.createQuery("FROM Task WHERE user.username =: user1");
+                    query.setParameter("user1", user.getUsername());
+                    result = query.list();
+                    return result;
+                }
+        );
+    }
+
+    @Override
     public Task findById(int id) {
         return this.tx(
                 session -> {
@@ -112,14 +128,33 @@ public class HbrStoreWrapper implements Store, AutoCloseable {
     }
 
     @Override
-    public List<Task> showFilterItems() {
+    public List<Task> showFilterItems(User user) {
         return this.tx(
                 session -> {
                     List<Task> result;
-                    Query query = session.createQuery("FROM Task WHERE done = false");
+                    Query query = session.createQuery("FROM Task WHERE done = false "
+                            + "and user.username =: user1");
+                    query.setParameter("user1", user.getUsername());
                     result = query.list();
                     return result;
                 }
+        );
+    }
+
+    @Override
+    public void addUser(User user) {
+        this.tx(
+                session -> session.save(user)
+        );
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return (User) this.tx(
+                session -> session
+                        .createQuery("FROM User WHERE email = :email1")
+                        .setParameter("email1", email)
+                        .uniqueResult()
         );
     }
 

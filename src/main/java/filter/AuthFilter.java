@@ -12,7 +12,7 @@ import java.io.IOException;
  * то отправляем на страницу авторизации.
  *
  * @author Nikolay Polegaev
- * @version 1.0 05.10.2021
+ * @version 2.0 23.10.2021
  */
 public class AuthFilter implements Filter {
     @Override
@@ -34,7 +34,7 @@ public class AuthFilter implements Filter {
             return;
         }
         if (req.getSession().getAttribute("user") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
+            resp.sendRedirect(req.getContextPath() + "/auth.do");
             return;
         }
         chain.doFilter(sreq, sresp);
