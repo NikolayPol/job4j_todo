@@ -3,9 +3,8 @@ package servlet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Task;
-import store.HbrStore;
+import store.HbrStoreWrapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,16 +28,16 @@ public class IndexServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/json");
         Task task = GSON.fromJson(req.getReader(), Task.class);
-        HbrStore.instOf().add(task);
+        HbrStoreWrapper.instOf().add(task);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("json");
-        List<Task> list = HbrStore.instOf().findAll();
+        List<Task> list = HbrStoreWrapper.instOf().findAll();
         String json = GSON.toJson(list);
         resp.getWriter().write(json);
     }
