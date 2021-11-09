@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Task;
 import model.User;
 
@@ -29,4 +30,6 @@ public interface Store {
     void addUser(User user);
 
     User findUserByEmail(String email);
+
+    List<Category> showCategories();
 }

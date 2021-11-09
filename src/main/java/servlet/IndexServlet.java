@@ -11,14 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс IndexServlet - контроллер для index.html.
- * Работает с Ajax.
+ * Работает с Ajax через Json.
  *
  * @author Nikolay Polegaev
- * @version 2.0 23.10.2021
+ * @version 2.1 09.11.2021
  */
 public class IndexServlet extends HttpServlet {
     private static final Gson GSON = new GsonBuilder().create();
@@ -29,7 +31,12 @@ public class IndexServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/json");
-        Task task = GSON.fromJson(req.getReader(), Task.class);
+        Map<String, String> map = new HashMap<>();
+        map = (Map<String, String>) GSON.fromJson(req.getReader(), map.getClass());
+        Task task = new Task(
+                map.get("description"),
+                map.get("categoryId"),
+                map.get("categoryName"));
         HttpSession s = req.getSession();
         User user = (User) s.getAttribute("user");
         task.setUser(user);

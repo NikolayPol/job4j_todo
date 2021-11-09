@@ -2,13 +2,82 @@ $(document).ready(
     showAll()
 );
 
+function showAll() {
+    $.ajax({
+        type: 'GET',
+        crossdomain: true,
+        url: 'http://localhost:8080/todo/index',
+        dataType: 'json'
+    }).done(function (data) {
+        showData(data);
+        showCategories();
+    }).fail(function (err) {
+        console.log(err);
+    });
+}
+
+function showData(data) {
+    $("#username").text(data[0].user.username);
+    $("#table tbody").empty();
+    console.log(data);
+    for (var task of data) {
+        const id = task.id;
+        const description = task.description;
+        const time = task.created.date.day
+            + "-" + task.created.date.month
+            + "-" + task.created.date.year;
+        const category = task.category.name;
+        const done = task.done;
+        $('#table tbody').append(
+            '<tr><td>' + description + '</td>'
+            + '<td align="center">' + time + '</td>'
+            + '<td align="center">' + category + '</td>'
+            + '<td align="center"><div>'
+            + '<input type="checkbox" id="' + id + '" name="done">'
+            + '</div></td>'
+            + '</tr>');
+        $("#" + id).attr("checked", done);
+    }
+}
+
+function showCategories() {
+    $.ajax({
+        type: 'GET',
+        crossdomain: true,
+        url: 'http://localhost:8080/todo/categories',
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+        $("#dp").empty();
+        for (var category of data) {
+            const id = category.id;
+            const name = category.name;
+            $('#dp').append(
+                '<a class="dropdown-item" href="#" data-id="' + id + '">' + name + '</a>');
+        }
+    }).fail(function (err) {
+        console.log(err);
+    });
+}
+
+$('#dp').on("click", function(){
+    const id = $(':focus').attr('data-id');
+    const name = $(':focus').text();
+    console.log(id);
+    console.log(name);
+    $("#dropdownMenuButton").attr('data-id', id);
+    $("#dropdownMenuButton").text(name);
+});
+
 function addTask() {
     $.ajax({
         type: 'POST',
         crossdomain: true,
         url: 'http://localhost:8080/todo/index',
         data: JSON.stringify({
-            description: $("#description").val()
+            description: $("#description").val(),
+            categoryId: $("#dropdownMenuButton").attr('data-id'),
+            categoryName: $("#dropdownMenuButton").text()
         }),
         dataType: 'json'
     }).done(function (data) {
@@ -27,19 +96,6 @@ function filterItems() {
     }
 }
 
-function showAll() {
-    $.ajax({
-        type: 'GET',
-        crossdomain: true,
-        url: 'http://localhost:8080/todo/index',
-        dataType: 'json'
-    }).done(function (data) {
-        showData(data);
-    }).fail(function (err) {
-        console.log(err);
-    });
-}
-
 function showFilterItems() {
     $.ajax({
         type: 'POST',
@@ -51,28 +107,6 @@ function showFilterItems() {
     }).fail(function (err) {
         console.log(err);
     });
-}
-
-function showData(data) {
-    $("#username").text(data[0].user.username);
-    $("#table tbody").empty();
-    console.log(data);
-    for (var task of data) {
-        const id = task.id;
-        const description = task.description;
-        const time = task.created.date.day
-            + "-" + task.created.date.month
-            + "-" + task.created.date.year;
-        const done = task.done;
-        $('#table tbody').append(
-            '<tr><td>' + description + '</td>'
-            + '<td>' + time + '</td>'
-            + '<td><div>'
-            + '<input type="checkbox" id="' + id + '" name="done">'
-            + '</div></td>'
-            + '</tr>');
-        $("#" + id).attr("checked", done);
-    }
 }
 
 $(document).on('change', ':checkbox', function () {

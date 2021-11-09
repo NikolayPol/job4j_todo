@@ -11,13 +11,13 @@ job4j_todo
 ### Технологии
 - Java 15;
 - Java EE Servlets;
-- Hibernate;  
+- Hibernate, Log4j;  
 - PostgreSQL;
 - Apache Maven;
 - Apache Tomcat;
-- HTML;
-- JavaScript, jQuery, Bootstrap, JSON;
+- HTML, CSS;
+- JavaScript, jQuery, Bootstrap, Ajax, Json;
 
 ### Общий вид приложения
-![alt text](src/main/resources/ToDo_1.png)
-![alt text](src/main/resources/ToDo_2.png)
+
+![alt text](src/main/resources/ToDo_3.png)

@@ -7,10 +7,10 @@ import java.util.Objects;
  * Класс User реализует модель пользователя.
  *
  * @author Nikolay Polegaev
- * @version 1.0 23.10.2021
+ * @version 1.1 09.11.2021
  */
 @Entity
-@Table(name = "users")
+@Table(name = "user_data", schema = "todolist", catalog = "todo")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

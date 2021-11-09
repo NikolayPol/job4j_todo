@@ -32,7 +32,7 @@ input {
     padding-bottom: 5px;
 }
 
-.col-md-3 {
+.col-md-2 {
     padding-right: 0;
     padding-left: 0;
     text-align: right
@@ -44,7 +44,7 @@ input {
     width: 10px;
 }
 
-.col-md-3 p {
+.col-md-2 p {
     display: inline-block;
     padding-right: 0;
     align: right;

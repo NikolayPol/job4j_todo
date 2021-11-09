@@ -1,10 +1,10 @@
 package store;
 
+import model.Category;
 import model.Task;
 import model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * Класс HbrStore реализует взаимодействие с БД через Hibernate.
@@ -181,6 +180,21 @@ public class HbrStore implements Store, AutoCloseable {
             LOG.error(e.getMessage(), e);
         }
         return user;
+    }
+
+    @Override
+    public List<Category> showCategories() {
+        List<Category> result = new ArrayList<>();
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            Query query = session.createQuery("FROM Category");
+            result = query.list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            sf.getCurrentSession().getTransaction().rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
     }
 
     /**

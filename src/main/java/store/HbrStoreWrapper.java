@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Task;
 import model.User;
 import org.hibernate.Session;
@@ -12,9 +13,8 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.function.Function;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Класс HbrStoreWrapper реализует шаблон Wrapper(Обертка).
@@ -155,6 +155,18 @@ public class HbrStoreWrapper implements Store, AutoCloseable {
                         .createQuery("FROM User WHERE email = :email1")
                         .setParameter("email1", email)
                         .uniqueResult()
+        );
+    }
+
+    @Override
+    public List<Category> showCategories() {
+        return this.tx(
+                session -> {
+                    List<Category> result;
+                    Query query = session.createQuery("FROM Category");
+                    result = query.list();
+                    return result;
+                }
         );
     }
 

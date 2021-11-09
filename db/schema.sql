@@ -1,28 +1,34 @@
-CREATE TABLE tasks
+CREATE TABLE todolist.task
 (
-    id   SERIAL PRIMARY KEY,
-    description TEXT,
-    created TIMESTAMP,
-    done bool,
-    user_id int not null references users(id)
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    description text COLLATE pg_catalog."default" NOT NULL,
+    done boolean NOT NULL,
+    user_id integer,
+    category_id integer,
+    created timestamp without time zone,
+    CONSTRAINT task_pkey PRIMARY KEY (id),
+    CONSTRAINT category_fkey FOREIGN KEY (category_id)
+        REFERENCES todolist.category (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT user_fkey FOREIGN KEY (user_id)
+        REFERENCES todolist.user_data (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 );
 
-insert into tasks (id, description, created, done, user_id) values (1, 'Сходить в зал', localtimestamp(1), false, 1);
-insert into tasks (id, description, created, done, user_id) values (2, 'Выучить джаву', localtimestamp(1), false, 1);
-insert into tasks (id, description, created, done, user_id) values (3, 'Сделать работу', localtimestamp(1), false, 1);
-
-insert into tasks (id, description, created, done, user_id) values (4, 'Выучить Jquery', localtimestamp(1), false, 2);
-insert into tasks (id, description, created, done, user_id) values (5, 'Выучить Javascript', localtimestamp(1), false, 2);
-insert into tasks (id, description, created, done, user_id) values (6, 'Заполнить ежедневник', localtimestamp(1), false, 2);
-
-CREATE TABLE users
+CREATE TABLE todolist.user_data
 (
-    id   SERIAL PRIMARY KEY,
-    username TEXT,
-    email TEXT,
-    password TEXT
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    username text COLLATE pg_catalog."default" NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_pkey PRIMARY KEY (id)
 );
 
-insert into users (id, username, email, password) values (1, 'Parfiry', 'parfiry@ya.ru', 'parf');
-insert into users (id, username, email, password) values (2, 'Vsevolod', '1234@ya.ru', '12345');
-
+CREATE TABLE todolist.category
+(
+    id   integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT category_pkey PRIMARY KEY (id)
+);
