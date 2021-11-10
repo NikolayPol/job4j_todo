@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Класс HbrStore реализует взаимодействие с БД через Hibernate.
@@ -41,7 +42,8 @@ public class HbrStore implements Store, AutoCloseable {
 
     @Override
     public Task add(Task task) {
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             session.save(task);
             session.getTransaction().commit();
@@ -55,7 +57,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public boolean update(Task task) {
         boolean result = false;
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("UPDATE Task SET done = :done1 where id = :id");
             query.setParameter("done1", task.getDone());
@@ -73,7 +76,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public boolean delete(int id) {
         boolean result = false;
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Task task = new Task();
             task.setId(id);
@@ -90,7 +94,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public List<Task> findAll() {
         List<Task> result = new ArrayList<>();
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("FROM Task");
             result = query.list();
@@ -105,7 +110,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public List<Task> findAll(User user) {
         List<Task> result = new ArrayList<>();
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("FROM Task WHERE user.username =: user1");
             query.setParameter("user1", user.getUsername());
@@ -121,7 +127,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public Task findById(int id) {
         Task task = null;
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             task = session.get(Task.class, id);
             session.getTransaction().commit();
@@ -135,7 +142,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public List<Task> showFilterItems(User user) {
         List<Task> result = new ArrayList<>();
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("FROM Task WHERE done = false "
                     + "and user.username =: user1");
@@ -156,7 +164,8 @@ public class HbrStore implements Store, AutoCloseable {
 
     @Override
     public void addUser(User user) {
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
@@ -169,7 +178,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public User findUserByEmail(String email) {
         User user = null;
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("FROM User WHERE email = :email1");
             query.setParameter("email1", email).uniqueResult();
@@ -185,7 +195,8 @@ public class HbrStore implements Store, AutoCloseable {
     @Override
     public List<Category> showCategories() {
         List<Category> result = new ArrayList<>();
-        try (Session session = sf.openSession()) {
+        try (Session session = sf.withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC")).openSession()) {
             session.beginTransaction();
             Query query = session.createQuery("FROM Category");
             result = query.list();

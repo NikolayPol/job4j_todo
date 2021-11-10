@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.TimeZone;
 import java.util.function.Function;
 
 /**
@@ -41,7 +42,10 @@ public class HbrStoreWrapper implements Store, AutoCloseable {
     }
 
     private <T> T tx(final Function<Session, T> command) {
-        final Session session = sf.openSession();
+        final Session session = sf
+                .withOptions()
+                .jdbcTimeZone(TimeZone.getTimeZone("UTC"))
+                .openSession();
         final Transaction tx = session.beginTransaction();
         try {
             T rsl = command.apply(session);

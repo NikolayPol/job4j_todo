@@ -23,9 +23,7 @@ function showData(data) {
     for (var task of data) {
         const id = task.id;
         const description = task.description;
-        const time = task.created.date.day
-            + "-" + task.created.date.month
-            + "-" + task.created.date.year;
+        const time = task.created;
         const category = task.category.name;
         const done = task.done;
         $('#table tbody').append(

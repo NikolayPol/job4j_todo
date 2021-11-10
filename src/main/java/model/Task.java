@@ -1,15 +1,15 @@
 package model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * Класс Task описывает модель задания.
  *
  * @author Nikolay Polegaev
- * @version 3.0 09.11.2021
+ * @version 3.1 10.11.2021
  */
 @Entity
 @Table(name = "task", schema = "todolist", catalog = "todo")
@@ -23,7 +23,8 @@ public class Task {
 
     private final String description;
 
-    private final LocalDateTime created;
+    @Temporal(TemporalType.TIMESTAMP)
+    private final Date created;
 
     private boolean done;
 
@@ -38,47 +39,47 @@ public class Task {
     public Task() {
         this.id = 0;
         this.description = "description";
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = false;
     }
 
     public Task(int id) {
         this.id = id;
         this.description = "";
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = false;
     }
 
     public Task(String description) {
         this.id = 0;
         this.description = description;
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = false;
     }
 
     public Task(int id, String description) {
         this.id = id;
         this.description = description;
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = false;
     }
 
     public Task(String description, String categoryId, String categoryName) {
         this.id = 0;
         this.description = description;
-        this.created = LocalDateTime.now();
+        this.created = new Date(System.currentTimeMillis());
         this.done = false;
         this.category = new Category(Integer.parseInt(categoryId), categoryName);
     }
 
-    public Task(int id, String description, LocalDateTime created, Boolean done) {
+    public Task(int id, String description, Date created, Boolean done) {
         this.id = id;
         this.description = description;
         this.created = created;
         this.done = done;
     }
 
-    public Task(int id, String description, LocalDateTime created, Boolean done, User user) {
+    public Task(int id, String description, Date created, Boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = created;
@@ -98,7 +99,7 @@ public class Task {
         return description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -150,7 +151,7 @@ public class Task {
         return "Task{"
                 + "id=" + id
                 + ", description='" + description + '\''
-                + ", created=" + FORMATTER.format(created)
+                + ", created=" + created
                 + ", done=" + done
                 + '}';
     }
